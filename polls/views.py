@@ -13,7 +13,6 @@ from django.utils import timezone
 from .models import Question, Choice
 
 
-
 # def index(request):
 #     latest_question_list = Question.objects.order_by('-pub_date')[:5]
 #     # template = loader.get_template('polls/index.html')
@@ -38,6 +37,13 @@ from .models import Question, Choice
 #     # what is %s referring to in our case? A: see line 20
 #     question = get_object_or_404(Question, pk=question_id)
 #     return render(request, 'polls/results.html', {'question': question})
+
+class ChoiceView(generic.ListView):
+    template_name = 'polls/choice.html'
+    context_object_name = 'latest_choice_list'
+    
+    def get_queryset(self):
+        return Choice.objects.filter(create_date__lte=timezone.now()).order_by('-create_date')[:5]
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
